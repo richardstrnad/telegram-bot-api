@@ -363,6 +363,20 @@ func (bot *BotAPI) SendMediaGroup(config MediaGroupConfig) ([]Message, error) {
 	return messages, err
 }
 
+// AnswerCallbackQuery response to a callback, this is always required, to make
+// sure that the progress bar of the client disappears
+func (bot *BotAPI) AnswerCallbackQuery(callback CallbackConfig) (bool, error) {
+	params, err := callback.params()
+	if err != nil {
+		return false, err
+	}
+	resp, err := bot.MakeRequest(callback.method(), params)
+	if err != nil {
+		return false, err
+	}
+	return resp.Ok, nil
+}
+
 // GetUserProfilePhotos gets a user's profile photos.
 //
 // It requires UserID.
